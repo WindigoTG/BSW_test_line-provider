@@ -1,7 +1,7 @@
 import decimal
 from typing import Optional
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict
 
 from src.utils.enums import EventState
 
@@ -17,7 +17,7 @@ class CreateEventSchema(BaseModel):
 
 
 class EventSchema(IDEventSchema, CreateEventSchema):
-    ...
+    model_config = ConfigDict(from_attributes=True)
 
 
 class UpdateEventSchema(IDEventSchema):
