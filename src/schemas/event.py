@@ -1,7 +1,7 @@
 from decimal import Decimal
 from typing import Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, field_serializer
 
 from src.utils.enums import EventState
 
@@ -18,6 +18,14 @@ class CreateEventSchema(BaseModel):
 
 class EventSchema(IDEventSchema, CreateEventSchema):
     model_config = ConfigDict(from_attributes=True)
+
+    @field_serializer('coefficient')
+    def serialize_coefficient(self, coefficient: Decimal, _info):
+        return str(coefficient)
+
+    @field_serializer('state')
+    def serialize_state(self, state: EventState, _info):
+        return state.value
 
 
 class UpdateEventSchema(IDEventSchema):
