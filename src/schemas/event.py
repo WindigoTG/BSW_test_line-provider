@@ -1,7 +1,7 @@
-import decimal
+from decimal import Decimal
 from typing import Optional
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, Field
 
 from src.utils.enums import EventState
 
@@ -11,7 +11,7 @@ class IDEventSchema(BaseModel):
 
 
 class CreateEventSchema(BaseModel):
-    coefficient: decimal.Decimal
+    coefficient: Decimal = Field(decimal_places=2, gt=0)
     deadline: int
     state: EventState
 
@@ -21,6 +21,10 @@ class EventSchema(IDEventSchema, CreateEventSchema):
 
 
 class UpdateEventSchema(IDEventSchema):
-    coefficient: Optional[decimal.Decimal] = None
+    coefficient: Optional[Decimal] = Field(
+        default=None,
+        decimal_places=2,
+        gt=0,
+    )
     deadline: Optional[int] = None
     state: Optional[EventState] = None
